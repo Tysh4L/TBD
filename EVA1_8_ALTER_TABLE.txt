@@ -1,0 +1,344 @@
+EVA1_8_ALTER_TABLE
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 8
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++--------------+----------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                   | Null | Key | Default | Extra          |
++--------------+----------------------------------------+------+-----+---------+----------------+
+| id           | int                                    | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50)                            | NO   |     | NULL    |                |
+| rfc          | varchar(13)                            | YES  |     | NULL    |                |
+| direccion    | varchar(50)                            | NO   |     | NULL    |                |
+| telefono     | varchar(10)                            | YES  |     | NULL    |                |
+| denominacion | enum('persona moral','persona fisica') | YES  |     | NULL    |                |
++--------------+----------------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0070 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table clientes
+                                       -> drop rfc;
+Query OK, 0 rows affected (0.0499 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++--------------+----------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                   | Null | Key | Default | Extra          |
++--------------+----------------------------------------+------+-----+---------+----------------+
+| id           | int                                    | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50)                            | NO   |     | NULL    |                |
+| direccion    | varchar(50)                            | NO   |     | NULL    |                |
+| telefono     | varchar(10)                            | YES  |     | NULL    |                |
+| denominacion | enum('persona moral','persona fisica') | YES  |     | NULL    |                |
++--------------+----------------------------------------+------+-----+---------+----------------+
+5 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table clientes
+                                       -> add column rfc varchar(13) not null after nombre;
+Query OK, 0 rows affected (0.0302 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++--------------+----------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                   | Null | Key | Default | Extra          |
++--------------+----------------------------------------+------+-----+---------+----------------+
+| id           | int                                    | NO   | PRI | NULL    | auto_increment |
+| nombre       | varchar(50)                            | NO   |     | NULL    |                |
+| rfc          | varchar(13)                            | NO   |     | NULL    |                |
+| direccion    | varchar(50)                            | NO   |     | NULL    |                |
+| telefono     | varchar(10)                            | YES  |     | NULL    |                |
+| denominacion | enum('persona moral','persona fisica') | YES  |     | NULL    |                |
++--------------+----------------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table clientes
+                                       -> change column nombre
+                                       -> razon_social varchar(100) not null;
+Query OK, 2 rows affected (0.0902 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++--------------+----------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                   | Null | Key | Default | Extra          |
++--------------+----------------------------------------+------+-----+---------+----------------+
+| id           | int                                    | NO   | PRI | NULL    | auto_increment |
+| razon_social | varchar(100)                           | NO   |     | NULL    |                |
+| rfc          | varchar(13)                            | NO   |     | NULL    |                |
+| direccion    | varchar(50)                            | NO   |     | NULL    |                |
+| telefono     | varchar(10)                            | YES  |     | NULL    |                |
+| denominacion | enum('persona moral','persona fisica') | YES  |     | NULL    |                |
++--------------+----------------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0029 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes;
++----+--------------+-----+-------------------+------------+----------------+
+| id | razon_social | rfc | direccion         | telefono   | denominacion   |
++----+--------------+-----+-------------------+------------+----------------+
+|  1 | Danna Lopez  |     | C 54 4000 Col Ros | 6141234567 | persona moral  |
+|  2 | Oxxo         |     | Cada esquina      | xxx        | persona fisica |
++----+--------------+-----+-------------------+------------+----------------+
+2 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > rename table clientes to cliente;
+Query OK, 0 rows affected (0.0253 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc cliente;
++--------------+----------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                   | Null | Key | Default | Extra          |
++--------------+----------------------------------------+------+-----+---------+----------------+
+| id           | int                                    | NO   | PRI | NULL    | auto_increment |
+| razon_social | varchar(100)                           | NO   |     | NULL    |                |
+| rfc          | varchar(13)                            | NO   |     | NULL    |                |
+| direccion    | varchar(50)                            | NO   |     | NULL    |                |
+| telefono     | varchar(10)                            | YES  |     | NULL    |                |
+| denominacion | enum('persona moral','persona fisica') | YES  |     | NULL    |                |
++--------------+----------------------------------------+------+-----+---------+----------------+
+6 rows in set (0.0026 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| cliente          |
+| mascotas         |
+| peliculas        |
+| playeras         |
+| student          |
+| tv               |
++------------------+
+7 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > rename table peliculas to pelicula;
+Query OK, 0 rows affected (0.0422 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > rename table playeras to playera;
+Query OK, 0 rows affected (0.0356 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| cliente          |
+| mascotas         |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+7 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > rename table mascotas to mascota;
+Query OK, 0 rows affected (0.0396 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| cliente          |
+| mascota          |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+7 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table docente(
+                                       -> id int key,
+                                       -> plaza varchar(50)
+                                       -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table docente{
+                                       -> plaza varchar(50),
+                                       -> horas_plaza int,
+                                       -> centro_trabajo varchar(50) not null,
+                                       -> salario decimal(10,2),
+                                       -> antiguedad int not null);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '{
+plaza varchar(50),
+horas_plaza int,
+centro_trabajo varchar(50) not null,
+salar' at line 1
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table docente( plaza varchar(50), horas_plaza int, centro_trabajo varchar(50) not null, salario decimal(10,2), antiguedad int not null);
+Query OK, 0 rows affected (0.0315 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| plaza          | varchar(50)   | YES  |     | NULL    |       |
+| horas_plaza    | int           | YES  |     | NULL    |       |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |       |
+| salario        | decimal(10,2) | YES  |     | NULL    |       |
+| antiguedad     | int           | NO   |     | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+5 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> add column nombre varchar(50) not null;
+Query OK, 0 rows affected (0.0246 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| plaza          | varchar(50)   | YES  |     | NULL    |       |
+| horas_plaza    | int           | YES  |     | NULL    |       |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |       |
+| salario        | decimal(10,2) | YES  |     | NULL    |       |
+| antiguedad     | int           | NO   |     | NULL    |       |
+| nombre         | varchar(50)   | NO   |     | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+6 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column nombre varchar(50) not null before plaza;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'before plaza' at line 2
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column nombre varchar(50) not null first;
+Query OK, 0 rows affected (0.0659 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| nombre         | varchar(50)   | NO   |     | NULL    |       |
+| plaza          | varchar(50)   | YES  |     | NULL    |       |
+| horas_plaza    | int           | YES  |     | NULL    |       |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |       |
+| salario        | decimal(10,2) | YES  |     | NULL    |       |
+| antiguedad     | int           | NO   |     | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+6 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> add column id int auto_increment key,
+                                       -> add column apellido varchar(50) after nombre,
+                                       -> add column R_F_C varchar(13);
+Query OK, 0 rows affected (0.0613 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | YES  |     | NULL    |                |
+| horas_plaza    | int           | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| R_F_C          | varchar(13)   | YES  |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column id int auto_increment not null first;
+Query OK, 0 rows affected (0.0607 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | YES  |     | NULL    |                |
+| horas_plaza    | int           | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
+| R_F_C          | varchar(13)   | YES  |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column R_F_C varchar(13) after apellido;
+Query OK, 0 rows affected (0.0601 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| R_F_C          | varchar(13)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | YES  |     | NULL    |                |
+| horas_plaza    | int           | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> change column R_F_C rfc varchar(13);
+Query OK, 0 rows affected (0.0263 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| rfc            | varchar(13)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | YES  |     | NULL    |                |
+| horas_plaza    | int           | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column plaza varchar(50) not null;
+Query OK, 0 rows affected (0.0591 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify horas_plaza time;
+Query OK, 0 rows affected (0.0865 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| rfc            | varchar(13)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | NO   |     | NULL    |                |
+| horas_plaza    | time          | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0023 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > alter table docente
+                                       -> modify column nombre varchar(50) not null;
+Query OK, 0 rows affected (0.0134 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc docente;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| nombre         | varchar(50)   | NO   |     | NULL    |                |
+| apellido       | varchar(50)   | YES  |     | NULL    |                |
+| rfc            | varchar(13)   | YES  |     | NULL    |                |
+| plaza          | varchar(50)   | NO   |     | NULL    |                |
+| horas_plaza    | time          | YES  |     | NULL    |                |
+| centro_trabajo | varchar(50)   | NO   |     | NULL    |                |
+| salario        | decimal(10,2) | YES  |     | NULL    |                |
+| antiguedad     | int           | NO   |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL >
