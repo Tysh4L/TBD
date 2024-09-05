@@ -1,0 +1,562 @@
+EVA1_9_CREATE_SELECT_LIKE_TEMP
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 10
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| cliente          |
+| docente          |
+| mascota          |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+8 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create temporary table prueba(
+                                       -> id int auto_increment key,
+                                       -> nombre varchar(50),
+                                       -> apellido varchar(50) not null,
+                                       -> edad int not null,
+                                       -> genero enum('0','1','2'));
+Query OK, 0 rows affected (0.0030 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| automovil        |
+| cliente          |
+| docente          |
+| mascota          |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+8 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from prueba;
+Empty set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > insert into prueba(apellido, edad)
+
+                                       -> values('asdfgh',10),('jklzxc',20),
+
+                                       -> ('qwerty',50);
+Query OK, 3 rows affected (0.0113 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc prueba;
++----------+-------------------+------+-----+---------+----------------+
+| Field    | Type              | Null | Key | Default | Extra          |
++----------+-------------------+------+-----+---------+----------------+
+| id       | int               | NO   | PRI | NULL    | auto_increment |
+| nombre   | varchar(50)       | YES  |     | NULL    | NULL           |
+| apellido | varchar(50)       | NO   |     | NULL    | NULL           |
+| edad     | int               | NO   |     | NULL    | NULL           |
+| genero   | enum('0','1','2') | YES  |     | NULL    | NULL           |
++----------+-------------------+------+-----+---------+----------------+
+5 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from prueba;
++----+--------+----------+------+--------+
+| id | nombre | apellido | edad | genero |
++----+--------+----------+------+--------+
+|  1 | NULL   | asdfgh   |   10 | NULL   |
+|  2 | NULL   | jklzxc   |   20 | NULL   |
+|  3 | NULL   | qwerty   |   50 | NULL   |
++----+--------+----------+------+--------+
+3 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL >
+
+-----
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > desc actor;
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type              | Null | Key | Default           | Extra                                         |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| actor_id    | smallint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| first_name  | varchar(45)       | NO   |     | NULL              |                                               |
+| last_name   | varchar(45)       | NO   | MUL | NULL              |                                               |
+| last_update | timestamp         | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+4 rows in set (0.0041 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select count(*) from actor;
++----------+
+| count(*) |
++----------+
+|      200 |
++----------+
+1 row in set (0.0178 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from actor limit 10;
++----------+------------+--------------+---------------------+
+| actor_id | first_name | last_name    | last_update         |
++----------+------------+--------------+---------------------+
+|        1 | PENELOPE   | GUINESS      | 2006-02-15 04:34:33 |
+|        2 | NICK       | WAHLBERG     | 2006-02-15 04:34:33 |
+|        3 | ED         | CHASE        | 2006-02-15 04:34:33 |
+|        4 | JENNIFER   | DAVIS        | 2006-02-15 04:34:33 |
+|        5 | JOHNNY     | LOLLOBRIGIDA | 2006-02-15 04:34:33 |
+|        6 | BETTE      | NICHOLSON    | 2006-02-15 04:34:33 |
+|        7 | GRACE      | MOSTEL       | 2006-02-15 04:34:33 |
+|        8 | MATTHEW    | JOHANSSON    | 2006-02-15 04:34:33 |
+|        9 | JOE        | SWANK        | 2006-02-15 04:34:33 |
+|       10 | CHRISTIAN  | GABLE        | 2006-02-15 04:34:33 |
++----------+------------+--------------+---------------------+
+10 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table actor like sakila.actor;
+Query OK, 0 rows affected (0.0400 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc actor;
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type              | Null | Key | Default           | Extra                                         |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| actor_id    | smallint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| first_name  | varchar(45)       | NO   |     | NULL              |                                               |
+| last_name   | varchar(45)       | NO   | MUL | NULL              |                                               |
+| last_update | timestamp         | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+4 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select count(*) from actor;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show create table actor;
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table
+
+
+
+                                                          |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| actor | CREATE TABLE `actor` (
+  `actor_id` smallint unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`actor_id`),
+  KEY `idx_actor_last_name` (`last_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 |
++-------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select count(*) from customer;
++----------+
+| count(*) |
++----------+
+|      599 |
++----------+
+1 row in set (0.0187 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from custormer limit 10;
+ERROR: 1146 (42S02): Table 'sakila.custormer' doesn't exist
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from customer limit 10;
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+| customer_id | store_id | first_name | last_name | email
+            | address_id | active | create_date         | last_update         |
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+|           1 |        1 | MARY       | SMITH     | MARY.SMITH@sakilacustomer.org       |          5 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           2 |        1 | PATRICIA   | JOHNSON   | PATRICIA.JOHNSON@sakilacustomer.org |          6 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           3 |        1 | LINDA      | WILLIAMS  | LINDA.WILLIAMS@sakilacustomer.org   |          7 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           4 |        2 | BARBARA    | JONES     | BARBARA.JONES@sakilacustomer.org    |          8 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           5 |        1 | ELIZABETH  | BROWN     | ELIZABETH.BROWN@sakilacustomer.org  |          9 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           6 |        2 | JENNIFER   | DAVIS     | JENNIFER.DAVIS@sakilacustomer.org   |         10 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           7 |        1 | MARIA      | MILLER    | MARIA.MILLER@sakilacustomer.org     |         11 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           8 |        2 | SUSAN      | WILSON    | SUSAN.WILSON@sakilacustomer.org     |         12 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           9 |        2 | MARGARET   | MOORE     | MARGARET.MOORE@sakilacustomer.org   |         13 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|          10 |        1 | DOROTHY    | TAYLOR    | DOROTHY.TAYLOR@sakilacustomer.org   |         14 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+10 rows in set (0.0037 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table cliente as
+                                       -> select * from sakila.customer;
+ERROR: 1050 (42S01): Table 'cliente' already exists
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table clientes as select * from sakila.customer;
+Query OK, 599 rows affected (0.0339 sec)
+
+Records: 599  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc clientes;
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type              | Null | Key | Default           | Extra                                         |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| customer_id | smallint unsigned | NO   |     | 0                 |                                               |
+| store_id    | tinyint unsigned  | NO   |     | NULL              |                                               |
+| first_name  | varchar(45)       | NO   |     | NULL              |                                               |
+| last_name   | varchar(45)       | NO   |     | NULL              |                                               |
+| email       | varchar(50)       | YES  |     | NULL              |                                               |
+| address_id  | smallint unsigned | NO   |     | NULL              |                                               |
+| active      | tinyint(1)        | NO   |     | 1                 |                                               |
+| create_date | datetime          | NO   |     | NULL              |                                               |
+| last_update | timestamp         | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+9 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from clientes limit 10;
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+| customer_id | store_id | first_name | last_name | email
+            | address_id | active | create_date         | last_update         |
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+|           1 |        1 | MARY       | SMITH     | MARY.SMITH@sakilacustomer.org       |          5 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           2 |        1 | PATRICIA   | JOHNSON   | PATRICIA.JOHNSON@sakilacustomer.org |          6 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           3 |        1 | LINDA      | WILLIAMS  | LINDA.WILLIAMS@sakilacustomer.org   |          7 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           4 |        2 | BARBARA    | JONES     | BARBARA.JONES@sakilacustomer.org    |          8 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           5 |        1 | ELIZABETH  | BROWN     | ELIZABETH.BROWN@sakilacustomer.org  |          9 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           6 |        2 | JENNIFER   | DAVIS     | JENNIFER.DAVIS@sakilacustomer.org   |         10 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           7 |        1 | MARIA      | MILLER    | MARIA.MILLER@sakilacustomer.org     |         11 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           8 |        2 | SUSAN      | WILSON    | SUSAN.WILSON@sakilacustomer.org     |         12 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|           9 |        2 | MARGARET   | MOORE     | MARGARET.MOORE@sakilacustomer.org   |         13 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
+|          10 |        1 | DOROTHY    | TAYLOR    | DOROTHY.TAYLOR@sakilacustomer.org   |         14 |      1 | 2006-02-14 22:04:36 | 2006-02-15 04:57:20 |
++-------------+----------+------------+-----------+-------------------------------------+------------+--------+---------------------+---------------------+
+10 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from country limit 10;
++------------+----------------+---------------------+
+| country_id | country        | last_update         |
++------------+----------------+---------------------+
+|          1 | Afghanistan    | 2006-02-15 04:44:00 |
+|          2 | Algeria        | 2006-02-15 04:44:00 |
+|          3 | American Samoa | 2006-02-15 04:44:00 |
+|          4 | Angola         | 2006-02-15 04:44:00 |
+|          5 | Anguilla       | 2006-02-15 04:44:00 |
+|          6 | Argentina      | 2006-02-15 04:44:00 |
+|          7 | Armenia        | 2006-02-15 04:44:00 |
+|          8 | Australia      | 2006-02-15 04:44:00 |
+|          9 | Austria        | 2006-02-15 04:44:00 |
+|         10 | Azerbaijan     | 2006-02-15 04:44:00 |
++------------+----------------+---------------------+
+10 rows in set (0.0203 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| actor            |
+| automovil        |
+| cliente          |
+| clientes         |
+| docente          |
+| mascota          |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+10 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table pais as select * from sakila.country;
+Query OK, 109 rows affected (0.0212 sec)
+
+Records: 109  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from pais limit 10;
++------------+----------------+---------------------+
+| country_id | country        | last_update         |
++------------+----------------+---------------------+
+|          1 | Afghanistan    | 2006-02-15 04:44:00 |
+|          2 | Algeria        | 2006-02-15 04:44:00 |
+|          3 | American Samoa | 2006-02-15 04:44:00 |
+|          4 | Angola         | 2006-02-15 04:44:00 |
+|          5 | Anguilla       | 2006-02-15 04:44:00 |
+|          6 | Argentina      | 2006-02-15 04:44:00 |
+|          7 | Armenia        | 2006-02-15 04:44:00 |
+|          8 | Australia      | 2006-02-15 04:44:00 |
+|          9 | Austria        | 2006-02-15 04:44:00 |
+|         10 | Azerbaijan     | 2006-02-15 04:44:00 |
++------------+----------------+---------------------+
+10 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select * from film limit 10;
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+| film_id | title            | description
+                                                                         | release_year | language_id | original_language_id | rental_duration | rental_rate | length | replacement_cost | rating | special_features
+ | last_update         |
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+|       1 | ACADEMY DINOSAUR | A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies                      |         2006 |           1 |                 NULL |               6 |        0.99 |     86 |            20.99 | PG     | Deleted Scenes,Behind the Scenes | 2006-02-15 05:03:42 |
+|       2 | ACE GOLDFINGER   | A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China                  |         2006 |           1 |                 NULL |               3 |        4.99 |     48 |            12.99 | G      | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       3 | ADAPTATION HOLES | A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory                      |         2006 |           1 |                 NULL |               7 |        2.99 |     50 |            18.99 | NC-17  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       4 | AFFAIR PREJUDICE | A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank                          |         2006 |           1 |                 NULL |               5 |        2.99 |    117 |            26.99 | G      | Commentaries,Behind the Scenes   | 2006-02-15 05:03:42 |
+|       5 | AFRICAN EGG      | A Fast-Paced Documentary of a Pastry Chef And a Dentist who must Pursue a Forensic Psychologist in The Gulf of Mexico |         2006 |           1 |                 NULL |               6 |        2.99 |    130 |            22.99 | G      | Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       6 | AGENT TRUMAN     | A Intrepid Panorama of a Robot And a Boy who must Escape a Sumo Wrestler in Ancient China                             |         2006 |           1 |                 NULL |               3 |        2.99 |    169 |            17.99 | PG     | Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       7 | AIRPLANE SIERRA  | A Touching Saga of a Hunter And a Butler who must Discover a Butler in A Jet Boat                                     |         2006 |           1 |                 NULL |               6 |        4.99 |     62 |            28.99 | PG-13  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       8 | AIRPORT POLLOCK  | A Epic Tale of a Moose And a Girl who must Confront a Monkey in Ancient India                                         |         2006 |           1 |                 NULL |               6 |        4.99 |     54 |            15.99 | R      | Trailers
+ | 2006-02-15 05:03:42 |
+|       9 | ALABAMA DEVIL    | A Thoughtful Panorama of a Database Administrator And a Mad Scientist who must Outgun a Mad Scientist in A Jet Boat   |         2006 |           1 |                 NULL |               3 |        2.99 |    114 |            21.99 | PG-13  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|      10 | ALADDIN CALENDAR | A Action-Packed Tale of a Man And a Lumberjack who must Reach a Feminist in Ancient China                             |         2006 |           1 |                 NULL |               6 |        4.99 |     63 |            24.99 | NC-17  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+10 rows in set (0.0188 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use tbd_e1;
+Default schema set to `tbd_e1`.
+Fetching global names, object names from `tbd_e1` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table pelicula like sakila.film;
+ERROR: 1050 (42S01): Table 'pelicula' already exists
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table films like sakila.film;
+Query OK, 0 rows affected (0.0346 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select count(*) from films;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > drop table films;
+Query OK, 0 rows affected (0.0155 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table films as select * from sakila.film;
+Query OK, 1000 rows affected (0.0463 sec)
+
+Records: 1000  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select count(*) from films;
++----------+
+| count(*) |
++----------+
+|     1000 |
++----------+
+1 row in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create temporary table categoria like sakila.category;
+Query OK, 0 rows affected (0.0038 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| actor            |
+| automovil        |
+| cliente          |
+| clientes         |
+| docente          |
+| films            |
+| mascota          |
+| pais             |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+12 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from pelicula limit 10;
++----+-------------+---------+-------+
+| id | titulo      | genero  | clasi |
++----+-------------+---------+-------+
+|  1 | Coraline    | Terror  | PG    |
+|  2 | Titanic     | Comedia | PG13  |
+|  3 | Sharknado   | Drama   | PG13  |
+|  4 | Sharknado 2 | Drama   | PG13  |
+| 20 | Nemo        | Terror  | PG13  |
+| 21 | Happy Feet  | Drama   | PG    |
+| 22 | Deadpool 3  | Komedia | Adult |
++----+-------------+---------+-------+
+7 rows in set (0.0125 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from films limit 10;
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+| film_id | title            | description
+                                                                         | release_year | language_id | original_language_id | rental_duration | rental_rate | length | replacement_cost | rating | special_features
+ | last_update         |
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+|       1 | ACADEMY DINOSAUR | A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies                      |         2006 |           1 |                 NULL |               6 |        0.99 |     86 |            20.99 | PG     | Deleted Scenes,Behind the Scenes | 2006-02-15 05:03:42 |
+|       2 | ACE GOLDFINGER   | A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China                  |         2006 |           1 |                 NULL |               3 |        4.99 |     48 |            12.99 | G      | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       3 | ADAPTATION HOLES | A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory                      |         2006 |           1 |                 NULL |               7 |        2.99 |     50 |            18.99 | NC-17  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       4 | AFFAIR PREJUDICE | A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank                          |         2006 |           1 |                 NULL |               5 |        2.99 |    117 |            26.99 | G      | Commentaries,Behind the Scenes   | 2006-02-15 05:03:42 |
+|       5 | AFRICAN EGG      | A Fast-Paced Documentary of a Pastry Chef And a Dentist who must Pursue a Forensic Psychologist in The Gulf of Mexico |         2006 |           1 |                 NULL |               6 |        2.99 |    130 |            22.99 | G      | Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       6 | AGENT TRUMAN     | A Intrepid Panorama of a Robot And a Boy who must Escape a Sumo Wrestler in Ancient China                             |         2006 |           1 |                 NULL |               3 |        2.99 |    169 |            17.99 | PG     | Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       7 | AIRPLANE SIERRA  | A Touching Saga of a Hunter And a Butler who must Discover a Butler in A Jet Boat                                     |         2006 |           1 |                 NULL |               6 |        4.99 |     62 |            28.99 | PG-13  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|       8 | AIRPORT POLLOCK  | A Epic Tale of a Moose And a Girl who must Confront a Monkey in Ancient India                                         |         2006 |           1 |                 NULL |               6 |        4.99 |     54 |            15.99 | R      | Trailers
+ | 2006-02-15 05:03:42 |
+|       9 | ALABAMA DEVIL    | A Thoughtful Panorama of a Database Administrator And a Mad Scientist who must Outgun a Mad Scientist in A Jet Boat   |         2006 |           1 |                 NULL |               3 |        2.99 |    114 |            21.99 | PG-13  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
+|      10 | ALADDIN CALENDAR | A Action-Packed Tale of a Man And a Lumberjack who must Reach a Feminist in Ancient China                             |         2006 |           1 |                 NULL |               6 |        4.99 |     63 |            24.99 | NC-17  | Trailers,Deleted Scenes
+ | 2006-02-15 05:03:42 |
++---------+------------------+-----------------------------------------------------------------------------------------------------------------------+--------------+-------------+----------------------+-----------------+-------------+--------+------------------+--------+----------------------------------+---------------------+
+10 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from filmsonlytitle limit 10;
+ERROR: 1146 (42S02): Table 'tbd_e1.filmsonlytitle' doesn't exist
+ MySQL  localhost:3306 ssl  tbd_e1  SQL >
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > show tables;
++------------------+
+| Tables_in_tbd_e1 |
++------------------+
+| actor            |
+| automovil        |
+| cliente          |
+| clientes         |
+| docente          |
+| films            |
+| mascota          |
+| pais             |
+| pelicula         |
+| playera          |
+| student          |
+| tv               |
++------------------+
+12 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > create table onlytitlefilms as select title from sakila.film;
+Query OK, 1000 rows affected (0.0961 sec)
+
+Records: 1000  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > select * from onlytitlefilms limit 10;
++------------------+
+| title            |
++------------------+
+| ACADEMY DINOSAUR |
+| ACE GOLDFINGER   |
+| ADAPTATION HOLES |
+| AFFAIR PREJUDICE |
+| AFRICAN EGG      |
+| AGENT TRUMAN     |
+| AIRPLANE SIERRA  |
+| AIRPORT POLLOCK  |
+| ALABAMA DEVIL    |
+| ALADDIN CALENDAR |
++------------------+
+10 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL > desc categoria;
++-------------+------------------+------+-----+-------------------+-----------------------------+
+| Field       | Type             | Null | Key | Default           | Extra                       |
++-------------+------------------+------+-----+-------------------+-----------------------------+
+| category_id | tinyint unsigned | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(25)      | NO   |     | NULL              | NULL                        |
+| last_update | timestamp        | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+------------------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd_e1  SQL >
