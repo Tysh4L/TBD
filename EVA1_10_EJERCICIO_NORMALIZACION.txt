@@ -1,0 +1,598 @@
+EVA1_10_EJERCICIO NORMALIZACION
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 10
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > create database empresa;
+Query OK, 1 row affected (0.0091 sec)
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| employees          |
+| empresa            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_e1             |
++--------------------+
+8 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  SQL > use empresa;
+Default schema set to `empresa`.
+Fetching global names, object names from `empresa` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee(
+                                        -> id int auto_increment key,
+                                        -> name varchar(50) not null,
+                                        -> last_name varchar(50) not null,
+                                        -> age int not null,
+                                        -> gender enum('F','M') not null,
+                                        -> ethnicity int not null,
+                                        -> city int not null,
+                                        -> hire_date date not null,
+                                        -> exit_date date;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 10
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee( id int auto_increment key, name varchar(50) not null, last_name varchar(50) not null, age int not null, gender enum('F','M') not null, ethnicity int not null, city int not null, hire_date date not null, exit_date date);
+Query OK, 0 rows affected (0.0158 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table job(
+                                        -> jbid int auto_increment key,
+                                        -> job_title varchar(50) not null);
+Query OK, 0 rows affected (0.0169 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table specialty(
+                                        -> spid int auto_increment key,
+                                        -> specialty varchar(50) not null);
+Query OK, 0 rows affected (0.0171 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table department(
+                                        -> dpid int auto_increment key,
+                                        -> department varchar(50) not null);
+
+Query OK, 0 rows affected (0.0168 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table business_unit(
+                                        -> buid int auto_increment key,
+                                        -> business_unit varchar(50) not null);
+Query OK, 0 rows affected (0.0176 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table ethnicity(
+                                        -> etid int auto_increment key,
+                                        -> ethnicity varchar(50) not null);
+Query OK, 0 rows affected (0.0183 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table country(
+                                        -> cid int auto_increment key,
+                                        -> country varchar(50) not null);
+Query OK, 0 rows affected (0.0174 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table city(
+                                        -> ctid int auto_increment key,
+                                        -> city varchar(50) not null,
+                                        -> countryid int not null,
+                                        -> foreign key(countryid) references
+
+                                        -> country(cid));
+Query OK, 0 rows affected (0.0207 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table employee
+                                        -> add constraint fk_ethnicity
+                                        -> foreign key (ethnicity)
+                                        -> references ethnicity(etid);
+Query OK, 0 rows affected (0.0383 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| id        | int           | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(50)   | NO   |     | NULL    |                |
+| last_name | varchar(50)   | NO   |     | NULL    |                |
+| age       | int           | NO   |     | NULL    |                |
+| gender    | enum('F','M') | NO   |     | NULL    |                |
+| ethnicity | int           | NO   | MUL | NULL    |                |
+| city      | int           | NO   |     | NULL    |                |
+| hire_date | date          | NO   |     | NULL    |                |
+| exit_date | date          | YES  |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > alter table employee drop primary key;
+ERROR: 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| id        | int           | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(50)   | NO   |     | NULL    |                |
+| last_name | varchar(50)   | NO   |     | NULL    |                |
+| age       | int           | NO   |     | NULL    |                |
+| gender    | enum('F','M') | NO   |     | NULL    |                |
+| ethnicity | int           | NO   | MUL | NULL    |                |
+| city      | int           | NO   |     | NULL    |                |
+| hire_date | date          | NO   |     | NULL    |                |
+| exit_date | date          | YES  |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create temporary table emp like employee;
+Query OK, 0 rows affected (0.0068 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc emp;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| id        | int           | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(50)   | NO   |     | NULL    | NULL           |
+| last_name | varchar(50)   | NO   |     | NULL    | NULL           |
+| age       | int           | NO   |     | NULL    | NULL           |
+| gender    | enum('F','M') | NO   |     | NULL    | NULL           |
+| ethnicity | int           | NO   | MUL | NULL    | NULL           |
+| city      | int           | NO   |     | NULL    | NULL           |
+| hire_date | date          | NO   |     | NULL    | NULL           |
+| exit_date | date          | YES  |     | NULL    | NULL           |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0028 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > drop table employee;
+Query OK, 0 rows affected (0.0143 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show create table emp;
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table
+
+
+
+
+                                                          |
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| emp   | CREATE TEMPORARY TABLE `emp` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `age` int NOT NULL,
+  `gender` enum('F','M') NOT NULL,
+  `ethnicity` int NOT NULL,
+  `city` int NOT NULL,
+  `hire_date` date NOT NULL,
+  `exit_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_ethnicity` (`ethnicity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > CREATE TABLE employee (
+                                        ->   `eeid` int NOT NULL AUTO_INCREMENT,
+                                        ->   `name` varchar(50) NOT NULL,
+                                        ->   `last_name` varchar(50) NOT NULL,
+                                        ->   `age` int NOT NULL,
+                                        ->   `gender` enum('F','M') NOT NULL,
+                                        ->   `ethnicity` int NOT NULL,
+                                        ->   `city` int NOT NULL,
+                                        ->   `hire_date` date NOT NULL,
+                                        ->   `exit_date` date DEFAULT NULL,
+                                        ->   PRIMARY KEY (`id`),
+                                        ->   KEY `fk_ethnicity` (`ethnicity`)
+                                        -> ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ERROR: 1072 (42000): Key column 'id' doesn't exist in table
+ MySQL  localhost:3306 ssl  empresa  SQL > CREATE TABLE employee (
+                                        ->                                         ->   `eeid` int NOT NULL AUTO_INCREMENT,
+                                        ->                                         ->   `name` varchar(50) NOT NULL,
+                                        ->                                         ->   `last_name` varchar(50) NOT NULL,
+                                        ->                                         ->   `age` int NOT NULL,
+                                        ->                                         ->   `gender` enum('F','M') NOT NULL,
+                                        ->                                         ->   `ethnicity` int NOT NULL,
+                                        ->                                         ->   `city` int NOT NULL,
+                                        ->                                         ->   `hire_date` date NOT NULL,
+                                        ->                                         ->   `exit_date` date DEFAULT NULL,
+                                        ->                                         ->   PRIMARY KEY (`id`),
+                                        ->                                         ->   KEY `fk_ethnicity` (`ethnicity`)
+                                        ->                                         -> ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '->   `eeid` int NOT NULL AUTO_INCREMENT,
+                                       ' at line 2
+ MySQL  localhost:3306 ssl  empresa  SQL > CREATE TABLE employee (
+                                        ->   eeid INT NOT NULL AUTO_INCREMENT,
+                                        ->   name VARCHAR(50) NOT NULL,
+                                        ->   last_name VARCHAR(50) NOT NULL,
+
+                                        ->   age INT NOT NULL,
+                                        ->   gender ENUM('F', 'M') NOT NULL,
+
+                                        ->   ethnicity INT NOT NULL,
+                                        ->   city INT NOT NULL,
+                                        ->   hire_date DATE NOT NULL,
+                                        ->   exit_date DATE DEFAULT NULL,
+                                        ->   PRIMARY KEY (eeid),
+                                        ->   KEY fk_ethnicity (ethnicity)
+                                        -> ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+Query OK, 0 rows affected (0.0190 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| eeid      | int           | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(50)   | NO   |     | NULL    |                |
+| last_name | varchar(50)   | NO   |     | NULL    |                |
+| age       | int           | NO   |     | NULL    |                |
+| gender    | enum('F','M') | NO   |     | NULL    |                |
+| ethnicity | int           | NO   | MUL | NULL    |                |
+| city      | int           | NO   |     | NULL    |                |
+| hire_date | date          | NO   |     | NULL    |                |
+| exit_date | date          | YES  |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0025 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| business_unit     |
+| city              |
+| country           |
+| department        |
+| employee          |
+| ethnicity         |
+| job               |
+| specialty         |
++-------------------+
+8 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job(
+                                        -> eeid int not null,
+                                        -> jbid int not null,
+                                        -> specialty int not null,
+                                        -> job_level enum('I','II','III', 'Sr'), department int not null;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job( eeid int not null, jbid int not null, specialty int, job_level enum('I','II','III', 'Sr'), department int not null, business_unit int not null, anual_salary decimal(9,2) not null, bonus_percent decimal(5,2) not null);
+Query OK, 0 rows affected (0.0185 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job(
+                                        -> eeid int not null,
+                                        -> jbid int not null,
+                                        -> spid int not null,
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_id(
+                                        -> eeid int not null,
+                                        -> jbid int not null,
+                                        -> sp int,
+                                        -> dp;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job(
+                                        -> eeid int not null,
+                                        -> jb int not null,
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job(
+                                        -> eeid int not null,
+                                        -> jbid int not null,
+                                        -> spid int,
+                                        -> dpid int not null,
+                                        -> buid int not null,
+                                        -> annual_salary decimal(9,2) not null,
+                                        -> bonus_percent decimal(5,2) not null,
+                                        -> foreign key(eeid)  id),
+                                        -> foreign key(eeid)
+                                        ->
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 10
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job( eeid int not null, jbid int not null, spid int, dpid int not null, buid int not null, annual_salary decimal(9,2) not null, bonus_percent decimal(5,2) not null,
+                                        -> primary key (eeid, jbid),
+                                        -> foreign key (eeid) references employee(eeid),
+                                        -> foreign key (jbid) references job(jbid),
+                                        -> foreign key (spid) references specialty(spid),
+                                        -> foreign key (dpid) references department(dpid),
+                                        -> foreign key (buid) references business_unit(buid));
+ERROR: 1050 (42S01): Table 'employee_job' already exists
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee_job;
++---------------+---------------------------+------+-----+---------+-------+
+| Field         | Type                      | Null | Key | Default | Extra |
++---------------+---------------------------+------+-----+---------+-------+
+| eeid          | int                       | NO   |     | NULL    |       |
+| jbid          | int                       | NO   |     | NULL    |       |
+| specialty     | int                       | YES  |     | NULL    |       |
+| job_level     | enum('I','II','III','Sr') | YES  |     | NULL    |       |
+| department    | int                       | NO   |     | NULL    |       |
+| business_unit | int                       | NO   |     | NULL    |       |
+| anual_salary  | decimal(9,2)              | NO   |     | NULL    |       |
+| bonus_percent | decimal(5,2)              | NO   |     | NULL    |       |
++---------------+---------------------------+------+-----+---------+-------+
+8 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > drop tamble employee_job;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tamble employee_job' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > drop table employee_job;
+Query OK, 0 rows affected (0.0148 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > create table employee_job( eeid int not null, jbid int not null, spid int, dpid int not null, buid int not null, annual_salary decimal(9,2) not null, bonus_percent decimal(5,2) not null, primary key (eeid, jbid), foreign key (eeid) references employee(eeid), foreign key (jbid) references job(jbid), foreign key (spid) references specialty(spid), foreign key (dpid) references department(dpid), foreign key (buid) references business_unit(buid));
+Query OK, 0 rows affected (0.0319 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee_job;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| eeid          | int          | NO   | PRI | NULL    |       |
+| jbid          | int          | NO   | PRI | NULL    |       |
+| spid          | int          | YES  | MUL | NULL    |       |
+| dpid          | int          | NO   | MUL | NULL    |       |
+| buid          | int          | NO   | MUL | NULL    |       |
+| annual_salary | decimal(9,2) | NO   |     | NULL    |       |
+| bonus_percent | decimal(5,2) | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+7 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > show tables;
++-------------------+
+| Tables_in_empresa |
++-------------------+
+| business_unit     |
+| city              |
+| country           |
+| department        |
+| employee          |
+| employee_job      |
+| ethnicity         |
+| job               |
+| specialty         |
++-------------------+
+9 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc contry;
+ERROR: 1146 (42S02): Table 'empresa.contry' doesn't exist
+ MySQL  localhost:3306 ssl  empresa  SQL > desc country;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| cid     | int         | NO   | PRI | NULL    | auto_increment |
+| country | varchar(50) | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into country
+                                        -> values (Brazil), (China), (United States);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'States)' at line 2
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into country (country) values (Brazil), (China), (United States);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'States)' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into country values ('Brazil'), ('China'), ('United States');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into country (country) values ('Brazil'), ('China'), ('United States');
+Query OK, 3 rows affected (0.0124 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > show table country;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'country' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from country;
++-----+---------------+
+| cid | country       |
++-----+---------------+
+|   1 | Brazil        |
+|   2 | China         |
+|   3 | United States |
++-----+---------------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc ethnicity;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| etid      | int         | NO   | PRI | NULL    | auto_increment |
+| ethnicity | varchar(50) | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into ethnicity (ethnicity)
+                                        -> values ('Asian'), ('Black'), ('Caucasian'), ('Latino');
+Query OK, 4 rows affected (0.0086 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from ethnicity;
++------+-----------+
+| etid | ethnicity |
++------+-----------+
+|    1 | Asian     |
+|    2 | Black     |
+|    3 | Caucasian |
+|    4 | Latino    |
++------+-----------+
+4 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc business_unit;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| buid          | int         | NO   | PRI | NULL    | auto_increment |
+| business_unit | varchar(50) | NO   |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into business_unit (business_unit)
+                                        -> values ('Corporate'), ('Manufacturing'), ('Research and Development'), ('Speciality Products');
+Query OK, 4 rows affected (0.0081 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from business_unit;
++------+--------------------------+
+| buid | business_unit            |
++------+--------------------------+
+|    1 | Corporate                |
+|    2 | Manufacturing            |
+|    3 | Research and Development |
+|    4 | Speciality Products      |
++------+--------------------------+
+4 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc city;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| ctid      | int         | NO   | PRI | NULL    | auto_increment |
+| city      | varchar(50) | NO   |     | NULL    |                |
+| countryid | int         | NO   | MUL | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into city (city, countryid)
+                                        -> values ('Austin', 3), ('Beijing', 2), ('Chengdu', 2), ('Chicago', 3), ('Chongqing', 2),
+                                        -> ('Columbus', 3), ('Miami', 3), ('Manaus', 1), ('Phoenix', 3), ('Rio de Janeiro', 1),
+                                        -> ('Seattle', 3), ('Shanghai', 2), ('Sao Paulo', 1);
+Query OK, 13 rows affected (0.0075 sec)
+
+Records: 13  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from city;
++------+----------------+-----------+
+| ctid | city           | countryid |
++------+----------------+-----------+
+|    1 | Austin         |         3 |
+|    2 | Beijing        |         2 |
+|    3 | Chengdu        |         2 |
+|    4 | Chicago        |         3 |
+|    5 | Chongqing      |         2 |
+|    6 | Columbus       |         3 |
+|    7 | Miami          |         3 |
+|    8 | Manaus         |         1 |
+|    9 | Phoenix        |         3 |
+|   10 | Rio de Janeiro |         1 |
+|   11 | Seattle        |         3 |
+|   12 | Shanghai       |         2 |
+|   13 | Sao Paulo      |         1 |
++------+----------------+-----------+
+13 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc department;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| dpid       | int         | NO   | PRI | NULL    | auto_increment |
+| department | varchar(50) | NO   |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0024 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into department (department)
+                                        -> values ('Accounting', 'Engineering', 'Finance', 'Human Resources', 'IT', 'Marketing', 'Sales');
+ERROR: 1136 (21S01): Column count doesn't match value count at row 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into department (department) values ('Accounting'), ('Engineering'), ('Finance'), ('Human Resources'), ('IT'), ('Marketing'), ('Sales');
+Query OK, 7 rows affected (0.0082 sec)
+
+Records: 7  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from department;
++------+-----------------+
+| dpid | department      |
++------+-----------------+
+|    1 | Accounting      |
+|    2 | Engineering     |
+|    3 | Finance         |
+|    4 | Human Resources |
+|    5 | IT              |
+|    6 | Marketing       |
+|    7 | Sales           |
++------+-----------------+
+7 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc specialty;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| spid      | int         | NO   | PRI | NULL    | auto_increment |
+| specialty | varchar(50) | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into specialty (specialty)
+                                        -> values ('HRIS'), (Technical), ('Enterprise'), ('Cloud Infrastructure'),
+                                        -> ('Control'), ('Quality'), ('Field'), ('Automation'), ('Operation'), (
+                                        -> 'Test'), ('Network');
+ERROR: 1054 (42S22): Unknown column 'Technical' in 'field list'
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into specialty (specialty) values ('HRIS'), ('Technical'), ('Enterprise'), ('Cloud Infrastructure'), ('Control'), ('Quality'), ('Field'), ('Automation'), ('Operation'), ( 'Test'), ('Network');
+Query OK, 11 rows affected (0.0083 sec)
+
+Records: 11  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from specialty;
++------+----------------------+
+| spid | specialty            |
++------+----------------------+
+|    1 | HRIS                 |
+|    2 | Technical            |
+|    3 | Enterprise           |
+|    4 | Cloud Infrastructure |
+|    5 | Control              |
+|    6 | Quality              |
+|    7 | Field                |
+|    8 | Automation           |
+|    9 | Operation            |
+|   10 | Test                 |
+|   11 | Network              |
++------+----------------------+
+11 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc job;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| jbid      | int         | NO   | PRI | NULL    | auto_increment |
+| job_title | varchar(50) | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+2 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into job (job_tittle)
+                                        -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into job (job_title)
+                                        -> values ('Analyst'), ('Architect'), ('Business Partner'), ('Coordinator'), ('Director'),
+                                        -> ('Engineer'), ('Manager'), ('Representative'), ('Vice President');
+Query OK, 9 rows affected (0.0092 sec)
+
+Records: 9  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from job;
++------+------------------+
+| jbid | job_title        |
++------+------------------+
+|    1 | Analyst          |
+|    2 | Architect        |
+|    3 | Business Partner |
+|    4 | Coordinator      |
+|    5 | Director         |
+|    6 | Engineer         |
+|    7 | Manager          |
+|    8 | Representative   |
+|    9 | Vice President   |
++------+------------------+
+9 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| eeid      | int           | NO   | PRI | NULL    | auto_increment |
+| name      | varchar(50)   | NO   |     | NULL    |                |
+| last_name | varchar(50)   | NO   |     | NULL    |                |
+| age       | int           | NO   |     | NULL    |                |
+| gender    | enum('F','M') | NO   |     | NULL    |                |
+| ethnicity | int           | NO   | MUL | NULL    |                |
+| city      | int           | NO   |     | NULL    |                |
+| hire_date | date          | NO   |     | NULL    |                |
+| exit_date | date          | YES  |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee (name, last name, age, gender, ethnicity, city, hire_date, exit_date)
+                                        -> values ('Emily', 'Davis', 55,'F', 2, 11, '2016-04-08', NULL);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name, age, gender, ethnicity, city, hire_date, exit_date)
+values ('Emily', 'Davi' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee (name, last name, age, gender, ethnicity, city, hire_date, exit_date) value ('Emily', 'Davis', 55,'F', 2, 11, '2016-04-08', NULL);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name, age, gender, ethnicity, city, hire_date, exit_date) value ('Emily', 'Davis' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee (name, last_name, age, gender, ethnicity, city, hire_date, exit_date) values ('Emily', 'Davis', 55,'F', 2, 11, '2016-04-08', NULL);
+Query OK, 1 row affected (0.0084 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > SELECT * FROM EMPLOYEE;
++------+-------+-----------+-----+--------+-----------+------+------------+-----------+
+| eeid | name  | last_name | age | gender | ethnicity | city | hire_date  | exit_date |
++------+-------+-----------+-----+--------+-----------+------+------------+-----------+
+|    1 | Emily | Davis     |  55 | F      |         2 |   11 | 2016-04-08 | NULL      |
++------+-------+-----------+-----+--------+-----------+------+------------+-----------+
+1 row in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > desc employee_job;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| eeid          | int          | NO   | PRI | NULL    |       |
+| jbid          | int          | NO   | PRI | NULL    |       |
+| spid          | int          | YES  | MUL | NULL    |       |
+| dpid          | int          | NO   | MUL | NULL    |       |
+| buid          | int          | NO   | MUL | NULL    |       |
+| annual_salary | decimal(9,2) | NO   |     | NULL    |       |
+| bonus_percent | decimal(5,2) | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+7 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee_job (eeid, jbid, spid, dpid, buid, annual_salaru, bonus percent)
+                                        -> values (1, 7, NULL, 5, 3, 141604.00, 0.15);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'percent)
+values (1, 7, NULL, 5, 3, 141604.00, 0.15)' at line 1
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee_job (eeid, jbid, spid, dpid, buid, annual_salaru, bonus_percent) values (1, 7, NULL, 5, 3, 141604.00, 0.15);
+ERROR: 1054 (42S22): Unknown column 'annual_salaru' in 'field list'
+ MySQL  localhost:3306 ssl  empresa  SQL > insert into employee_job (eeid, jbid, spid, dpid, buid, annual_salary, bonus_percent) values (1, 7, NULL, 5, 3, 141604.00, 0.15);
+Query OK, 1 row affected (0.0081 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL > select * from employee_job;
++------+------+------+------+------+---------------+---------------+
+| eeid | jbid | spid | dpid | buid | annual_salary | bonus_percent |
++------+------+------+------+------+---------------+---------------+
+|    1 |    7 | NULL |    5 |    3 |     141604.00 |          0.15 |
++------+------+------+------+------+---------------+---------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  empresa  SQL >
